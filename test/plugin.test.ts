@@ -24,9 +24,6 @@ describe("cloudflare-update-manager", () => {
 	test("notFound in build output", async () => {
 		env = await createEnv();
 
-		// Replace with assertions for your routes / build hooks
-		expect(env.pluginLoader.getPlugins().some((p) => p.name)).toBe(true);
-
 		const buildResult = await env.build();
 
 		const absOutdir = join(

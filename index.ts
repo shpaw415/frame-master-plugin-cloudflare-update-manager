@@ -8,6 +8,7 @@ export type CloudflareUpdateManagerPluginOptions = {
 		notFound: string | (() => string);
 		actionBasePath: string;
 	};
+	autoInjectCheckVersion?: boolean;
 };
 
 export const FUNCTION_PATHS = {
@@ -26,6 +27,7 @@ export default function cloudflareupdatemanager(
 		props.paths.actionBasePath,
 		FUNCTION_PATHS.versionTestEndpoint,
 	);
+	const autoInjectEnabled = props.autoInjectCheckVersion ?? true;
 	const virtualModuleContent = `
 	"no-action";
 	const CURRENT_VERSION = "${Bun.randomUUIDv7()}";
@@ -49,6 +51,32 @@ export default function cloudflareupdatemanager(
 								: await Bun.file(props.paths.notFound).text(),
 					},
 					entrypoints: ["404.html"],
+					plugins: autoInjectEnabled
+						? [
+								{
+									name: "html-check-injection",
+									setup(build) {
+										const htmlRewrtier = new HTMLRewriter().on("head", {
+											element(element) {
+												element.append(
+													`<meta name="version" content="${Bun.randomUUIDv7()}">`,
+													{ html: true },
+												);
+												element.append(
+													`<script type="module">import "frame-master-plugin-cloudflare-update-manager/client";</script>`,
+													{ html: true },
+												);
+											},
+										});
+										build.finally("html", ({ contents }) => {
+											return {
+												contents: htmlRewrtier.transform(contents as string),
+											};
+										});
+									},
+								},
+							]
+						: [],
 				};
 			},
 		},

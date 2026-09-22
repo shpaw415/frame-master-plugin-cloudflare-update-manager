@@ -7,17 +7,6 @@ const wranglerPort = 8789;
 export const createEnvPlugin = () =>
 	BuildUnifier({
 		plugins: [
-			cfFunctionAction({
-				actionBasePath: "test/actions",
-				outDir: ".frame-master/build",
-				serverPort: wranglerPort,
-			}),
-			cloudflareupdatemanager({
-				paths: {
-					notFound: "test/notFound.html",
-					actionBasePath: "test/actions",
-				},
-			}),
 			{
 				name: "proxy-to-wrangler",
 				version: "0.0.0",
@@ -42,6 +31,23 @@ export const createEnvPlugin = () =>
 						},
 					},
 				},
+				build: {
+					buildConfig: {
+						entrypoints: ["test/index.html"],
+					},
+				},
 			},
+			cfFunctionAction({
+				actionBasePath: "test/actions",
+				outDir: ".frame-master/build",
+				serverPort: wranglerPort,
+			}),
+			cloudflareupdatemanager({
+				paths: {
+					notFound: "test/notFound.html",
+					actionBasePath: "test/actions",
+				},
+				autoInjectCheckVersion: true,
+			}),
 		],
 	});
