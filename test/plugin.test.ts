@@ -14,10 +14,11 @@ describe("cloudflare-update-manager", () => {
 		env = undefined;
 	});
 
-	const createEnv = () =>
+	const createEnv = (runServer: boolean = false) =>
 		createPluginTestEnv({
 			plugins: createEnvPlugin(),
-			runServerStart: false,
+			runServerStart: runServer,
+			startServer: runServer,
 		});
 
 	test("notFound in build output", async () => {
@@ -27,8 +28,6 @@ describe("cloudflare-update-manager", () => {
 		expect(env.pluginLoader.getPlugins().some((p) => p.name)).toBe(true);
 
 		const buildResult = await env.build();
-
-		console.log(buildResult);
 
 		const absOutdir = join(
 			process.cwd(),
@@ -42,9 +41,23 @@ describe("cloudflare-update-manager", () => {
 		expect(await notFoundOutput?.text()).toContain("Not found");
 	});
 
-	/*test("build function with cfFunctionAction", async () => {
-		env = await createPluginTestEnv({
-			plugins: createEnvPlugin(),
+	test("checkVersion - deleteCache", async () => {
+		env = await createEnv(true);
+		const res = await env.fetch("/api/versionTest");
+
+		const versionRemote = await res.text();
+		expect(versionRemote).toSatisfy((id) =>
+			new RegExp(/^.*-.*-.*-.*-.*$/).test(id),
+		);
+
+		const deleteCacheRes = await env.fetch("/api/versionTest", {
+			method: "DELETE",
 		});
-	});*/
+
+		console.log(deleteCacheRes.headers);
+
+		expect(deleteCacheRes.status).toBe(200);
+		//expect(deleteCacheRes.headers.get("clear-site-data")).toBe("*");
+		expect(await deleteCacheRes.text()).toBe("clear browser cache");
+	});
 });

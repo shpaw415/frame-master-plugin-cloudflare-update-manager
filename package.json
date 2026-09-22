@@ -12,7 +12,7 @@
 		"test": "bun test"
 	},
 	"devDependencies": {
-		"frame-master": "^4.0.0",
+		"frame-master": "^4.0.1",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
