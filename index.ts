@@ -27,6 +27,7 @@ export default function cloudflareupdatemanager(
 		FUNCTION_PATHS.versionTestEndpoint,
 	);
 	const virtualModuleContent = `
+	"no-action";
 	const CURRENT_VERSION = "${Bun.randomUUIDv7()}";
 	export const onRequestGet = () => { return new Response(CURRENT_VERSION); } ;
 	export const onRequestDelete = () => { return new Response("clear browser cache", {
