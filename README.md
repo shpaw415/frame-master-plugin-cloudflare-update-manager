@@ -15,7 +15,7 @@ bun add frame-master-plugin-cloudflare-update-manager
 | Import | File | What it is |
 | --- | --- | --- |
 | `frame-master-plugin-cloudflare-update-manager` | `index.ts` | Plugin factory (default), `CloudflareUpdateManagerPluginOptions`, `FUNCTION_PATHS` |
-| `frame-master-plugin-cloudflare-update-manager/client` | `src/client.ts` | Browser script. Side effects only — import it, do not call it |
+| `frame-master-plugin-cloudflare-update-manager/client` | `src/client.ts` | Browser script. Import runs the check when `window` exists; default export is `checkVersion` |
 
 ## Configuration
 
@@ -49,13 +49,29 @@ export default {
 
 ## Client
 
-Import the client from a browser entry so it runs on each page load:
+Importing the module in the browser runs the check (top-level `await`). On the server, `window` is missing, so the import is a no-op until that module runs in the browser. It `GET`s `/api/versionTest` and compares the body to `localStorage["CF_PAGES_CURRENT_VERSION"]`. When they differ it stores the new value, `DELETE`s `/api/versionTest`, then reloads. The default export is `checkVersion` if you need to call it again; the import already runs it once.
 
-```typescript
-import "frame-master-plugin-cloudflare-update-manager/client";
+### HTML
+
+```html
+<script type="module">
+  import "frame-master-plugin-cloudflare-update-manager/client";
+</script>
 ```
 
-On load it `GET`s `/api/versionTest` and compares the body to `localStorage["CF_PAGES_CURRENT_VERSION"]`. When they differ it stores the new value, `DELETE`s `/api/versionTest`, then reloads.
+### React
+
+Import it once from the client shell so every page load checks the version:
+
+```tsx
+// src/client-shell.tsx
+import "frame-master-plugin-cloudflare-update-manager/client";
+import type { ReactNode } from "react";
+
+export default function ClientShell({ children }: { children: ReactNode }) {
+  return children;
+}
+```
 
 ## What the plugin emits
 

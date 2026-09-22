@@ -1,4 +1,11 @@
-```typescript
+```html
+<script type="module">
+  import "frame-master-plugin-cloudflare-update-manager/client";
+</script>
+```
+
+```tsx
+// src/client-shell.tsx
 import "frame-master-plugin-cloudflare-update-manager/client";
 ```
 
