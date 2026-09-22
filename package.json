@@ -1,0 +1,16 @@
+{
+	"name": "cloudflare-update-manager",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "index.ts",
+	"scripts": {
+		"test": "bun test"
+	},
+	"devDependencies": {
+		"frame-master": "^4.0.0"
+	},
+	"peerDependencies": {
+		"frame-master": "^4.0.0",
+		"frame-master-plugin-cloudflare-pages-functions-action": "^4.0.1"
+	}
+}
