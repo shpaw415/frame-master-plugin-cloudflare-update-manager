@@ -2,7 +2,12 @@
 	"name": "frame-master-plugin-cloudflare-update-manager",
 	"version": "0.1.0",
 	"type": "module",
+	"description": "Frame Master plugin that publishes a Cloudflare Pages 404 page and clears the browser cache when a new build is deployed.",
 	"main": "index.ts",
+	"exports": {
+		".": "./index.ts",
+		"./client": "./src/client.ts"
+	},
 	"scripts": {
 		"test": "bun test"
 	},
