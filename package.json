@@ -12,11 +12,11 @@
 		"test": "bun test"
 	},
 	"devDependencies": {
-		"frame-master": "^4.0.1",
+		"frame-master": "4.0.2",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"frame-master": "^4.0.0",
+		"frame-master": "^4.0.2",
 		"frame-master-plugin-cloudflare-pages-functions-action": "^4.0.1",
 		"typescript": "^7"
 	},

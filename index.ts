@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { getBuildUnifierContext } from "frame-master/plugin";
 import type { FrameMasterPlugin } from "frame-master/plugin/types";
 import { name, version } from "./package.json";
+import { FUNCTION_PATHS } from "./src/shared";
 
 export type CloudflareUpdateManagerPluginOptions = {
 	paths: {
@@ -10,10 +11,6 @@ export type CloudflareUpdateManagerPluginOptions = {
 	};
 	autoInjectCheckVersion?: boolean;
 };
-
-export const FUNCTION_PATHS = {
-	versionTestEndpoint: "api/versionTest.js",
-} as const;
 
 /**
  * cloudflare-update-manager - Frame-Master Plugin
@@ -63,12 +60,12 @@ export default function cloudflareupdatemanager(
 													{ html: true },
 												);
 												element.append(
-													`<script type="module">import "frame-master-plugin-cloudflare-update-manager/client";</script>`,
+													`<script type="module" src="frame-master-plugin-cloudflare-update-manager/client"></script>`,
 													{ html: true },
 												);
 											},
 										});
-										build.finally("html", ({ contents }) => {
+										build.finally("html", ({ contents, path }) => {
 											return {
 												contents: htmlRewrtier.transform(contents as string),
 											};

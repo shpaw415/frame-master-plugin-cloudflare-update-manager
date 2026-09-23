@@ -6,10 +6,10 @@
       "name": "cloudflare-update-manager",
       "devDependencies": {
         "@types/bun": "latest",
-        "frame-master": "^4.0.0",
+        "frame-master": "4.0.2",
       },
       "peerDependencies": {
-        "frame-master": "^4.0.0",
+        "frame-master": "^4.0.2",
         "frame-master-plugin-cloudflare-pages-functions-action": "^4.0.1",
         "typescript": "^7",
       },
@@ -206,7 +206,7 @@
 
     "esbuild": ["esbuild@0.28.1", "", { "optionalDependencies": { "@esbuild/aix-ppc64": "0.28.1", "@esbuild/android-arm": "0.28.1", "@esbuild/android-arm64": "0.28.1", "@esbuild/android-x64": "0.28.1", "@esbuild/darwin-arm64": "0.28.1", "@esbuild/darwin-x64": "0.28.1", "@esbuild/freebsd-arm64": "0.28.1", "@esbuild/freebsd-x64": "0.28.1", "@esbuild/linux-arm": "0.28.1", "@esbuild/linux-arm64": "0.28.1", "@esbuild/linux-ia32": "0.28.1", "@esbuild/linux-loong64": "0.28.1", "@esbuild/linux-mips64el": "0.28.1", "@esbuild/linux-ppc64": "0.28.1", "@esbuild/linux-riscv64": "0.28.1", "@esbuild/linux-s390x": "0.28.1", "@esbuild/linux-x64": "0.28.1", "@esbuild/netbsd-arm64": "0.28.1", "@esbuild/netbsd-x64": "0.28.1", "@esbuild/openbsd-arm64": "0.28.1", "@esbuild/openbsd-x64": "0.28.1", "@esbuild/openharmony-arm64": "0.28.1", "@esbuild/sunos-x64": "0.28.1", "@esbuild/win32-arm64": "0.28.1", "@esbuild/win32-ia32": "0.28.1", "@esbuild/win32-x64": "0.28.1" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-HrJrvZv5ayxBzPfwphOoNzkzOIIlifzk0KJrGK2c8R4+LKpMtpYLQeUdjnwjWv/LZlkH2laZk+4w78pi99D4Vw=="],
 
-    "frame-master": ["frame-master@4.0.1", "", { "dependencies": { "@monaco-editor/react": "^4.7.0", "@shpaw415/mui-lite": "^0.1.5", "@shpaw415/webtoken": "^2.0.0", "chalk": "^5.6.2", "commander": "^14.0.3", "git": "^0.1.5", "lucide-react": "^1.14.0", "react": "^19.2.5", "react-dom": "^19.2.5", "tar": "^7.5.13" }, "peerDependencies": { "typescript": "^6.0.3" }, "bin": { "frame-master": "bin/index.ts" } }, "sha512-dXmU1ilby0r9i9rHdKnV6Ck+B0DZSyfd6r2SRetpZNA9tteYpzU3kyrAfEGVJB3OFy/EMA7v784YmDyKJVFIdA=="],
+    "frame-master": ["frame-master@4.0.2", "", { "dependencies": { "@monaco-editor/react": "^4.7.0", "@shpaw415/mui-lite": "^0.1.5", "@shpaw415/webtoken": "^2.0.0", "chalk": "^5.6.2", "commander": "^14.0.3", "git": "^0.1.5", "lucide-react": "^1.14.0", "react": "^19.2.5", "react-dom": "^19.2.5", "tar": "^7.5.13" }, "peerDependencies": { "typescript": "^6.0.3" }, "bin": { "frame-master": "bin/index.ts" } }, "sha512-1A9dT9ex32odFyvXfVHj3Tl/p7mjy3YVFJ8jihFyNQ2l6L60iqqBmzynNrpa8MKGsIN7bag8o48qAVAkWz66hg=="],
 
     "frame-master-plugin-cloudflare-pages-functions-action": ["frame-master-plugin-cloudflare-pages-functions-action@4.0.1", "", { "dependencies": { "frame-master-plugin-cloudflare-pages-functions-action": "^4.0.0", "superjson": "^2.2.6" }, "peerDependencies": { "frame-master": "^4.0.0-0", "npm": "11.6.2", "wrangler": "^4.83.0" } }, "sha512-COgG+KFlvlmEv1NjemlKVpiUOTnX1EruPUkMNTpfW2Ty6JJY11Cg45cLbP7IffqaRyEf2NZSFjHX1J/4lFqJMg=="],
 
