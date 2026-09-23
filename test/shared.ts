@@ -1,11 +1,13 @@
+import { mkdirSync } from "node:fs";
 import { BuildUnifier } from "frame-master/plugin";
 import cfFunctionAction from "frame-master-plugin-cloudflare-pages-functions-action";
 import cloudflareupdatemanager from "../index";
 
 const wranglerPort = 8789;
 
-export const createEnvPlugin = () =>
-	BuildUnifier({
+export const createEnvPlugin = () => {
+	mkdirSync("test/actions", { recursive: true });
+	return BuildUnifier({
 		plugins: [
 			{
 				name: "proxy-to-wrangler",
@@ -51,3 +53,4 @@ export const createEnvPlugin = () =>
 			}),
 		],
 	});
+};

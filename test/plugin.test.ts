@@ -12,6 +12,8 @@ describe("cloudflare-update-manager", () => {
 	afterEach(async () => {
 		await env?.dispose();
 		env = undefined;
+		globalThis.WRANGLER_PROCESS?.kill();
+		globalThis.WRANGLER_PROCESS = undefined;
 	});
 
 	const createEnv = (runServer: boolean = false) =>
