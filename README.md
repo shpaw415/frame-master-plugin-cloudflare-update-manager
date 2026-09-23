@@ -12,9 +12,9 @@ bun add frame-master-plugin-cloudflare-update-manager
 
 ## Package exports
 
-| Import | File | What it is |
-| --- | --- | --- |
-| `frame-master-plugin-cloudflare-update-manager` | `index.ts` | Plugin factory (default), `CloudflareUpdateManagerPluginOptions`, `FUNCTION_PATHS` |
+| Import                                                 | File            | What it is                                                                                   |
+| ------------------------------------------------------ | --------------- | -------------------------------------------------------------------------------------------- |
+| `frame-master-plugin-cloudflare-update-manager`        | `index.ts`      | Plugin factory (default), `CloudflareUpdateManagerPluginOptions`, `FUNCTION_PATHS`           |
 | `frame-master-plugin-cloudflare-update-manager/client` | `src/client.ts` | Browser script. Import runs the check when `window` exists; default export is `checkVersion` |
 
 ## Configuration
@@ -54,9 +54,10 @@ Importing the module in the browser runs the check (top-level `await`). On the s
 ### HTML
 
 ```html
-<script type="module">
-  import "frame-master-plugin-cloudflare-update-manager/client";
-</script>
+<script
+  type="module"
+  src="frame-master-plugin-cloudflare-update-manager/client"
+></script>
 ```
 
 ### React
@@ -82,10 +83,10 @@ export default function ClientShell({ children }: { children: ReactNode }) {
 
 ## Options
 
-| Option | Type | Description |
-| --- | --- | --- |
-| `paths.notFound` | `string \| (() => string)` | Path to the 404 HTML file, or a function that returns the HTML |
-| `paths.actionBasePath` | `string` | Same directory as functions-action `actionBasePath` |
+| Option                 | Type                       | Description                                                    |
+| ---------------------- | -------------------------- | -------------------------------------------------------------- |
+| `paths.notFound`       | `string \| (() => string)` | Path to the 404 HTML file, or a function that returns the HTML |
+| `paths.actionBasePath` | `string`                   | Same directory as functions-action `actionBasePath`            |
 
 ## Testing
 

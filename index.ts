@@ -65,7 +65,7 @@ export default function cloudflareupdatemanager(
 												);
 											},
 										});
-										build.finally("html", ({ contents, path }) => {
+										build.finally("html", ({ contents }) => {
 											return {
 												contents: htmlRewrtier.transform(contents as string),
 											};
