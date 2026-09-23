@@ -38,25 +38,29 @@ describe("cloudflare-update-manager", () => {
 		);
 		expect(notFoundOutput).toBeDefined();
 		expect(await notFoundOutput?.text()).toContain("Not found");
+
+		const builtHtml = await Bun.file(join(absOutdir, "404.html")).text();
+		expect(builtHtml).toContain("data-cf-pages-update-manager");
+		expect(builtHtml).toContain("api/__CF_MANAGER__/versionTest");
 	});
 
 	test("checkVersion - deleteCache", async () => {
 		env = await createEnv(true);
-		const res = await env.fetch("/api/versionTest");
+		const res = await env.fetch("/api/__CF_MANAGER__/versionTest");
 
 		const versionRemote = await res.text();
 		expect(versionRemote).toSatisfy((id) =>
 			new RegExp(/^.*-.*-.*-.*-.*$/).test(id),
 		);
+		expect(res.headers.get("cache-control")).toContain("no-store");
 
-		const deleteCacheRes = await env.fetch("/api/versionTest", {
+		const deleteCacheRes = await env.fetch("/api/__CF_MANAGER__/versionTest", {
 			method: "DELETE",
 		});
 
-		console.log(deleteCacheRes.headers);
-
 		expect(deleteCacheRes.status).toBe(200);
-		//expect(deleteCacheRes.headers.get("clear-site-data")).toBe("*");
+		expect(deleteCacheRes.headers.get("clear-site-data")).toBe('"cache"');
+		expect(deleteCacheRes.headers.get("cache-control")).toContain("no-store");
 		expect(await deleteCacheRes.text()).toBe("clear browser cache");
 	});
 });

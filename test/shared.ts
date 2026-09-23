@@ -19,16 +19,14 @@ export const createEnvPlugin = () => {
 							url.port = wranglerPort.toString();
 							const res = await fetch(url.toString(), req);
 							const resText = await res.text();
-							const removeList = ["content-encoding", "transfer-encoding"];
-
-							const filteredHeaders = Object.entries(res.headers).filter(
-								([name, _value]) => !removeList.includes(name.toLowerCase()),
-							);
+							const headers = new Headers(res.headers);
+							headers.delete("content-encoding");
+							headers.delete("transfer-encoding");
 
 							return new Response(resText, {
 								status: res.status,
 								statusText: res.statusText,
-								headers: Object.fromEntries(filteredHeaders),
+								headers,
 							});
 						},
 					},

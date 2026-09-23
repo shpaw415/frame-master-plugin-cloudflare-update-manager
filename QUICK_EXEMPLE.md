@@ -1,7 +1,7 @@
-```html
-<script type="module">
-  import "frame-master-plugin-cloudflare-update-manager/client";
-</script>
+Built HTML is injected automatically (`autoInjectCheckVersion`, default `true`). For a client shell:
+
+```tsx
+import "frame-master-plugin-cloudflare-update-manager/client";
 ```
 
 ```tsx

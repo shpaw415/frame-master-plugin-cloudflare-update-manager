@@ -1,6 +1,6 @@
 # frame-master-plugin-cloudflare-update-manager
 
-Frame Master plugin for Cloudflare Pages. It writes a custom `404.html` into the build, and ships a Pages Function the browser calls to drop stale cache after a new deploy.
+Frame Master plugin for Cloudflare Pages. It writes a custom `404.html` into the build, and ships a Pages Function the browser calls to drop the full origin cache (HTML, JS, CSS, and every other cached file) after a new deploy.
 
 Requires [frame-master](https://github.com/shpaw415/frame-master) `^4.0.0` and [frame-master-plugin-cloudflare-pages-functions-action](https://github.com/shpaw415/frame-master-plugin-cloudflare-pages-functions-action) `^4.0.1`. Register both inside `BuildUnifier` from `frame-master/plugin`. `paths.actionBasePath` must match the functions-action `actionBasePath`.
 
@@ -49,16 +49,19 @@ export default {
 
 ## Client
 
-Importing the module in the browser runs the check (top-level `await`). On the server, `window` is missing, so the import is a no-op until that module runs in the browser. It `GET`s `/api/versionTest` and compares the body to `localStorage["CF_PAGES_CURRENT_VERSION"]`. When they differ it stores the new value, `DELETE`s `/api/versionTest`, then reloads. The default export is `checkVersion` if you need to call it again; the import already runs it once.
+Importing the module in the browser runs the check (top-level `await`). On the server, `window` is missing, so the import is a no-op. With `autoInjectCheckVersion` (default `true`) the same script is injected into built HTML and into HTML served by the Frame Master dev server.
+
+It `GET`s `/api/__CF_MANAGER__/versionTest` with `cache: "no-store"` and compares the body to `localStorage["CF_PAGES_CURRENT_VERSION"]`. The first visit only stores the version. When a later Cloudflare Pages deploy changes it, the client:
+
+1. Deletes Cache Storage entries and unregisters service workers (these hold JS/HTML the HTTP cache header does not).
+2. `DELETE`s `/api/__CF_MANAGER__/versionTest`. The response is `Clear-Site-Data: "cache"`, which drops the browser HTTP cache for every file on the origin.
+3. Stores the new version and reloads once with a `__cf_refresh` query so the document itself is not served stale. That query is removed after the fresh page loads.
+
+Cookies and other `localStorage` keys are left alone, so a deploy does not log people out. The default export is `checkVersion` if you need to call it again; the import already runs it once.
 
 ### HTML
 
-```html
-<script
-  type="module"
-  src="frame-master-plugin-cloudflare-update-manager/client"
-></script>
-```
+Built HTML gets the checker injected in `<head>` when `autoInjectCheckVersion` is left on. Do not use a bare package specifier as a script `src`; browsers cannot load it.
 
 ### React
 
@@ -77,9 +80,9 @@ export default function ClientShell({ children }: { children: ReactNode }) {
 ## What the plugin emits
 
 - **`404.html`** — contents of `paths.notFound`, emitted by this plugin's build so Cloudflare Pages can serve a custom not-found page.
-- **`{actionBasePath}/api/versionTest.js`** — virtual module registered with BuildUnifier. The file starts with `"no-action"` so functions-action treats it as a raw Pages Function, not a typed action. The version string is a UUID v7 captured when the plugin factory runs (one value per config load / build, not per request).
-  - `GET /api/versionTest` returns that version.
-  - `DELETE /api/versionTest` responds with `Clear-Site-Data: *`.
+- **`{actionBasePath}/api/__CF_MANAGER__/versionTest.js`** — virtual module registered with BuildUnifier. The file starts with `"no-action"` so functions-action treats it as a raw Pages Function, not a typed action. The version string is a UUID v7 captured when the plugin factory runs (one value per config load / build, not per request).
+  - `GET /api/__CF_MANAGER__/versionTest` returns that version with `Cache-Control: no-store`, so the browser cannot keep a stale deploy id.
+  - `DELETE /api/__CF_MANAGER__/versionTest` responds with `Clear-Site-Data: "cache"`, which empties the origin HTTP cache (HTML, JS, CSS, images, fonts, and other cached files).
 
 ## Options
 
@@ -87,6 +90,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
 | ---------------------- | -------------------------- | -------------------------------------------------------------- |
 | `paths.notFound`       | `string \| (() => string)` | Path to the 404 HTML file, or a function that returns the HTML |
 | `paths.actionBasePath` | `string`                   | Same directory as functions-action `actionBasePath`            |
+| `autoInjectCheckVersion` | `boolean`                | Inject the checker into HTML. Default `true`                   |
 
 ## Testing
 
