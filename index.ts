@@ -22,7 +22,7 @@ export default function cloudflareupdatemanager(
 ): FrameMasterPlugin {
 	const pathToVersionTestEndpoint = join(
 		props.paths.actionBasePath,
-		FUNCTION_PATHS.versionTestEndpoint,
+		FUNCTION_PATHS.versionTestFilePath,
 	);
 	const autoInjectEnabled = props.autoInjectCheckVersion ?? true;
 	const virtualModuleContent = `
